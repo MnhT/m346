@@ -18,4 +18,4 @@
 
 ## Error Erklärung
 
-Man kann keine VM starten, die mehr Prozessoren oder RAM hat, als das Host-System hat. Da die VM Hardware vom Betriebssystem braucht und wenn die nicht vorhanden ist, ist es nicht möglich zu starten.
+Es ist nicht möglich, eine VM mit mehr Prozessoren oder RAM zu starten als das Host-System hat. Es ist weil die VM Hardware-Ressourcen vom Betriebssystem benötigt.
