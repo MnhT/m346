@@ -20,7 +20,6 @@ packages:
 
 runcmd:
   - sudo apt update
-  - sudo apt -y install mariadb-server php-mysqli
   - sudo mysql -sfu root -e "GRANT ALL ON *.* TO 'admin'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;"
   - sudo systemctl restart mariadb.service
   - sudo a2enconf adminer
