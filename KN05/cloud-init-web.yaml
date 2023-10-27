@@ -1,0 +1,57 @@
+#cloud-config
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      -  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVa4fQBFi+jUxAe3cqWmiNQ9FTBPxpB5F0UIJuBSjXzSe5QCH/SPl6qBUE8gosdkr3ImlsrNhc7Acob/7m2vsWB4a8rxc+7MaHlyBNQi2PIcHe3TRfmGP/1SJ04KXRLcPPiZJ1Rz7ED34UdN+qnDilfvMFC4KUqs8FBryp+yZY3jFfa13RXddkpYPuJRvnfOgtlaeXEQAM6TzHlQbOlBJzwchM/0/0eVi9fElnhK34Nfs7I8kQ8gr3Y4E3kh+tBlxmo2IZkJk8aN6xfq42EBgX85YpPHhNsDzIoIqviwGO94HOCAs7UTRjPtIXZA5W/snm0YjptEdFSN30s9q5/Yaz imported-openssh-key
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCu78/mu26M0HdnAvAmXqWSebWZEl0FpSsNO8bpHEnhUMQ2NyZkqs+PrEaIbmbebGqblBw47cKM+b/qYIS9wL1gqBPHSujisINbpI5cWrZhA0MicLUmSj9cnTjYAJ6EqBUwiLCDSa3zqB12Djs+gqPOb9NE4erTMYVnhU3buQjDQLSasKLlbwAPaP08a8rwMTOCkF7rwk5rQSEQCSixRRQE08sadailCfKMU+R590AfrVsve2K1iItjBbBtu0rS39DWMQ909ytd5o+8pYYvxEq7UERl2hZMYKeeHCtemQeiKXEPEAuV6wQ2Xr/ievqYEKTJBFvNDd0Ce36rblVEDJQh bourbian
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0WGP1EZykEtv5YGC9nMiPFW3U3DmZNzKFO5nEu6uozEHh4jLZzPNHSrfFTuQ2GnRDSt+XbOtTLdcj26+iPNiFoFha42aCIzYjt6V8Z+SQ9pzF4jPPzxwXfDdkEWylgoNnZ+4MG1lNFqa8aO7F62tX0Yj5khjC0Bs7Mb2cHLx1XZaxJV6qSaulDuBbLYe8QUZXkMc7wmob3PM0kflfolR3LE7LResIHWa4j4FL6r5cQmFlDU2BDPpKMFMGUfRSFiUtaWBNXFOWHQBC2+uKmuMPYP4vJC9sBgqMvPN/X2KyemqdMvdKXnCfrzadHuSSJYEzD64Cve5Zl9yVvY4AqyBD NUY
+ssh_pwauth: false
+disable_root: false
+package_update: true
+
+packages:
+  - php
+  - apache2
+  - libapache2-mod-php
+  - php-mysqli
+
+write_files:
+  - path: /var/www/html/db.php
+    permissions: '0644'
+    content: |
+      <?php
+        // database
+        $servername = "172.31.92.197:3306";
+        $username = "admin";
+        $password = "password";
+        $dbname = "mysql";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "select Host, User from mysql.user;";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+          echo ($row["Host"] . " / " . $row["User"] . "<br />");
+        }
+        //var_dump($result);
+      ?>
+
+  - path: /var/www/html/info.php
+    permissions: '0644'
+    content: |
+      <?php
+      // Show all information, defaults to INFO_ALL
+      phpinfo();
+      ?>
+
+runcmd:
+  - sudo systemctl restart apache2
