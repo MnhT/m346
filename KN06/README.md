@@ -2,8 +2,7 @@
 
 ### Reverse Proxy
 
-Ein Reverse Proxy ist Server, der Anfragen von einem Cumputer entgegennimmt und sie an einen bestimmten ZielComputer weiterleitet. Vermittler zwischen Client und Server
-
+Ein Reverse Proxy ist mittelman der Resourcen von internen server holt für externen clients. 
 <img src="./images/1.png">
 <img src="./images/2.png">
 <img src="./images/3.png">
